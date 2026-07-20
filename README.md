@@ -10,7 +10,7 @@
 
 ## 👩 Giới thiệu
 
-**Đinh Thị Xuân** là giáo viên mầm non với nhiều năm gắn bó cùng sự nghiệp chăm sóc và giáo dục trẻ. Luôn tận tâm, yêu nghề và lấy sự phát triển toàn diện của trẻ làm mục tiêu trong công việc.
+**Bà Đinh Thị Xuân** là giáo viên mầm non với nhiều năm gắn bó cùng sự nghiệp chăm sóc và giáo dục trẻ. Luôn tận tâm, yêu nghề và lấy sự phát triển toàn diện của trẻ làm mục tiêu trong công việc.
 
 > *"Mỗi đứa trẻ là một bông hoa, người giáo viên là người kiên nhẫn chăm sóc để hoa nở đúng mùa."*
 
@@ -23,8 +23,8 @@
 | Họ và tên | Đinh Thị Xuân |
 | Ngày sinh | 20/05/1980 |
 | Nghề nghiệp | Giáo viên Mầm non |
-| Nơi công tác | *(Cập nhật nếu cần)* |
-| Nơi sinh sống | Hòa Bình, Việt Nam |
+| Nơi công tác | *Mầm Non Lạc Thịnh* |
+| Nơi sinh sống | Phú Thọ, Việt Nam |
 
 ---
 
