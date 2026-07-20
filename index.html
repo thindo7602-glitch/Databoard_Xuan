@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Hồ Sơ — Đinh Thị Xuân</title>
+<meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
+<meta name="x-apple-disable-message-reformatting" content="true">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,500&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Space+Mono:wght@400;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#050f0d;
+    --hatch-color:rgba(180,196,190,0.05);
+    --glass:rgba(19,42,38,0.20);
+    --glass-2:rgba(14,32,29,0.28);
+    --line:rgba(150,240,210,0.16);
+    --line-strong:rgba(150,240,210,0.32);
+
+    --jade-1:#2ad9a8; --jade-2:#8ff2d6; --jade-3:#12886b; --jade-4:#0a4a3c; --jade-5:#062822;
+    --teal:#22b8a4; --mint:#b6f5df; --silver:#c3d4cd;
+
+    --emerald:#2df0a0;  /* Học vấn */
+    --amber:#ffc862;    /* Lương & phụ cấp */
+    --coral:#ff7a6b;    /* Công tác */
+    --amethyst:#b48cff; /* Cá nhân */
+    --sapphire:#5ec8ff; /* Đảng */
+    --rose:#ff8fb3;     /* Khen thưởng */
+
+    --ink:#e4f7ee; --ink-dim:#9dc2b6; --ink-faint:#5a7a71;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;height:100%; background:var(--bg);}
+  #bgFixed{
+    position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:-2; pointer-events:none;
+    background-color:var(--bg);
+    background-image:repeating-linear-gradient(135deg,
+      rgba(190,204,198,0.035) 0px, rgba(190,204,198,0.035) 24px,
+      transparent 24px, transparent 45px,
+      rgba(190,204,198,0.017) 45px, rgba(190,204,198,0.017) 69px,
+      transparent 69px, transparent 90px);
+  }
+  #bgGlow{
+    position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:-1; pointer-events:none;
+    background:
+      radial-gradient(circle 420px at 8% 6%, rgba(45,240,160,0.16), transparent 65%),
+      radial-gradient(circle 380px at 92% 14%, rgba(255,200,98,0.11), transparent 65%),
+      radial-gradient(circle 360px at 85% 78%, rgba(255,122,107,0.10), transparent 65%),
+      radial-gradient(circle 400px at 6% 82%, rgba(180,140,255,0.11), transparent 65%),
+      radial-gradient(circle 420px at 50% 90%, rgba(255,143,179,0.10), transparent 65%),
+      radial-gradient(circle 500px at 50% 45%, rgba(94,200,255,0.06), transparent 70%);
+    filter:blur(6px);
+  }
+  body{background:transparent; color:var(--ink); font-family:'Cormorant Garamond', serif; overflow-x:hidden; scroll-snap-type:y proximity; height:100%;}
+  h1,h2,h3,.display{font-family:Tahoma, 'Segoe UI', Arial, sans-serif; font-weight:700;}
+  .name-title{
+    font-family:'Space Mono', monospace !important;
+    text-transform:uppercase;
+    font-weight:900 !important;
+    font-size:clamp(2.1rem,4.6vw,3.4rem) !important;
+    letter-spacing:.01em;
+    line-height:1.35;
+    padding-top:10px;
+    display:inline-block;
+    transform:scaleX(1.15);
+    transform-origin:left center;
+  }
+  .name-sub{
+    font-size:0.5em;
+    text-transform:none;
+    font-weight:600;
+    letter-spacing:.02em;
+  }
+  .subtitle-box{
+    display:inline-block;
+    margin-top:14px;
+    padding:8px 22px;
+    border:1px solid var(--jade-1);
+    border-radius:8px;
+    background:var(--glass-2);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    box-shadow:0 0 20px rgba(45,240,160,0.12);
+  }
+  .subtitle-box span{
+    font-family:Tahoma, 'Segoe UI', sans-serif;
+    font-size:1.3rem;
+    font-weight:700;
+    letter-spacing:.03em;
+  }
+  .mono{ font-family:'Space Mono', monospace; }
+  .gold-text{
+    background:linear-gradient(100deg, var(--jade-4) 0%, var(--emerald) 22%, var(--mint) 40%, var(--amber) 60%, var(--jade-1) 80%, var(--jade-4) 100%);
+    background-size:300% auto; -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:transparent;
+    animation:shimmer 9s linear infinite;
+  }
+  @keyframes shimmer{0%{background-position:0% 50%;}100%{background-position:300% 50%;}}
+
+  .pagenav{ position:fixed; right:16px; top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:11px; z-index:50; }
+  .pagenav a{ width:8px; height:8px; border-radius:50%; border:1px solid var(--jade-1); background:transparent; display:block; transition:all .3s; position:relative; }
+  .pagenav a.active{background:var(--jade-1); box-shadow:0 0 10px rgba(42,217,168,.7);}
+  .pagenav a span{ position:absolute; right:18px; top:-6px; white-space:nowrap; font-family:'Cormorant Garamond',serif; font-size:11.5px; letter-spacing:.1em; color:var(--ink-faint); opacity:0; transition:opacity .3s; text-transform:uppercase; }
+  .pagenav a:hover span{opacity:1;}
+
+  section.screen{ min-height:100vh; scroll-snap-align:start; padding:52px 5vw 36px; display:flex; flex-direction:column; position:relative; border-bottom:1px solid var(--line); }
+  .topbar{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:28px; flex-wrap:wrap; gap:12px; }
+  .topbar .eyebrow{ font-family:'Space Mono', monospace; letter-spacing:.22em; text-transform:uppercase; font-size:11px; color:var(--jade-1); opacity:.9; }
+  .sec-num{
+    font-family:Tahoma, 'Segoe UI', sans-serif;
+    font-weight:700;
+    margin-right:10px;
+    background:linear-gradient(100deg, var(--jade-4) 0%, var(--emerald) 22%, var(--mint) 40%, var(--amber) 60%, var(--jade-1) 80%, var(--jade-4) 100%);
+    background-size:300% auto; -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:transparent;
+    animation:shimmer 9s linear infinite;
+  }
+  .sub-num{ color:var(--jade-1); font-family:'Space Mono',monospace; font-weight:700; margin-right:8px; font-size:0.9em; }
+  .topbar-right{ display:flex; align-items:center; gap:10px; }
+  .collapse-btn{ font-family:'Space Mono', monospace; font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:var(--jade-1); background:var(--glass-2); backdrop-filter:blur(8px); border:1px solid var(--jade-3); border-radius:16px; padding:6px 14px; cursor:pointer; transition:all .2s; white-space:nowrap; }
+  .collapse-btn:hover{ background:rgba(42,217,168,.14); }
+  .id-row{ display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:16px; }
+  .id-chip{ font-family:'Space Mono', monospace; font-size:11.5px; color:var(--ink-dim); background:var(--glass-2); border:1px solid var(--line); border-radius:14px; padding:6px 13px; backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); white-space:nowrap; }
+  .id-chip b{ color:var(--jade-1); font-weight:700; margin-right:7px; letter-spacing:.03em; }
+  .screen.collapsed{ min-height:0 !important; padding-bottom:24px; }
+  .screen.collapsed > *:not(.topbar){ display:none !important; }
+  .topbar h1{ font-size:clamp(1.5rem,3vw,2.3rem); margin:6px 0 0; font-family:'Space Mono', monospace; }
+  .pageflag{ font-family:'Space Mono', monospace; font-size:12px; color:var(--ink-faint); letter-spacing:.08em; text-transform:uppercase; border:1px solid var(--line); background:var(--glass); backdrop-filter:blur(10px); padding:6px 14px; border-radius:20px; align-self:flex-end; }
+  .pageflag b{color:var(--jade-1); font-weight:700;}
+
+  .glass{ background:var(--glass); backdrop-filter:blur(16px) saturate(140%); -webkit-backdrop-filter:blur(16px) saturate(140%); border:1px solid var(--line); border-radius:6px; box-shadow:0 8px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04); position:relative; }
+  .glass::before{ content:''; position:absolute; inset:0; border-radius:6px; background:linear-gradient(160deg, rgba(255,255,255,0.05), transparent 40%); pointer-events:none; }
+
+  .kpi-row{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:26px; }
+  @media(max-width:900px){.kpi-row{grid-template-columns:repeat(2,1fr);}}
+  .kpi{ padding:18px 20px; border-left:2px solid var(--jade-1); }
+  .kpi .num{ font-family:'Space Mono', monospace; font-size:1.8rem; font-weight:700; color:var(--jade-1); position:relative; z-index:1;}
+  .kpi .lbl{ font-family:'Cormorant Garamond',serif; font-size:12px; letter-spacing:.09em; text-transform:uppercase; color:var(--ink-faint); margin-top:6px; position:relative; z-index:1; }
+
+  .filters{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:24px; }
+  .pill{ font-family:'Cormorant Garamond',serif; font-size:13.5px; letter-spacing:.04em; padding:8px 18px; border-radius:20px; border:1px solid var(--line); background:var(--glass-2); backdrop-filter:blur(10px); color:var(--ink-dim); cursor:pointer; transition:all .25s; position:relative; }
+  .pill .dot{display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:8px;}
+  .pill:hover{ border-color:var(--jade-1); color:var(--ink); }
+  .pill.active{ background:rgba(42,217,168,.14); border-color:var(--jade-1); color:var(--mint); }
+  .pill.active[data-cat="Học vấn"]{border-color:var(--emerald); color:var(--emerald); background:rgba(45,240,160,.14);}
+  .pill.active[data-cat="Lương"]{border-color:var(--amber); color:var(--amber); background:rgba(255,200,98,.14);}
+  .pill.active[data-cat="Công tác"]{border-color:var(--coral); color:var(--coral); background:rgba(255,122,107,.14);}
+  .pill.active[data-cat="Cá nhân"]{border-color:var(--amethyst); color:var(--amethyst); background:rgba(180,140,255,.14);}
+  .pill.active[data-cat="Đảng"]{border-color:var(--sapphire); color:var(--sapphire); background:rgba(94,200,255,.14);}
+  .pill.active[data-cat="Khen thưởng"]{border-color:var(--rose); color:var(--rose); background:rgba(255,143,179,.14);}
+
+  .chart-row{ display:grid; grid-template-columns:1fr 1.4fr; gap:22px; flex:1; }
+  @media(max-width:900px){.chart-row{grid-template-columns:1fr; }}
+  .panel{ padding:22px 24px; display:flex; flex-direction:column; }
+  .panel h3{ font-size:1.02rem; margin:0 0 16px; color:var(--jade-2); font-weight:600; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; position:relative; z-index:1; }
+  .panel h3 .tag{ font-family:'Space Mono', monospace; font-size:10.5px; letter-spacing:.08em; color:var(--ink-faint); text-transform:uppercase; font-weight:400; }
+
+  .donut-wrap{ display:flex; align-items:center; gap:26px; flex:1; position:relative; z-index:1; }
+  .donut{ width:160px; height:160px; border-radius:50%; flex-shrink:0; position:relative; box-shadow:0 0 34px rgba(45,240,160,0.18), 0 0 50px rgba(255,200,98,0.08); transition:filter .3s; }
+  .donut::after{ content:''; position:absolute; inset:24px; border-radius:50%; background:var(--jade-5); backdrop-filter:blur(4px); }
+  .donut-center{ position:absolute; inset:24px; display:flex; align-items:center; justify-content:center; flex-direction:column; z-index:2; }
+  .donut-center .n{ font-family:'Space Mono', monospace; font-size:1.4rem; font-weight:700; color:var(--jade-1); }
+  .donut-center .t{ font-family:'Cormorant Garamond',serif; font-size:10.5px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.1em; }
+  .legend{ display:flex; flex-direction:column; gap:10px; font-family:'Cormorant Garamond',serif; font-size:14px; }
+  .legend li{list-style:none; display:flex; align-items:center; justify-content:space-between; gap:10px; color:var(--ink-dim);}
+  .legend .sw{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:8px;}
+  .legend b{color:var(--ink); font-weight:600; font-family:'Space Mono',monospace;}
+
+  .barchart{ flex:1; display:flex; align-items:flex-end; gap:14px; padding:10px 4px 0; min-height:190px; position:relative; z-index:1; }
+  .bar-col{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; }
+  .bar{ width:100%; max-width:50px; border-radius:3px 3px 0 0; background:linear-gradient(180deg, var(--mint), var(--jade-1) 45%, var(--sapphire) 100%); box-shadow:0 0 14px rgba(42,217,168,.3); transition:transform .3s, filter .3s; }
+  .bar-col:hover .bar{ filter:brightness(1.3); transform:scaleX(1.06); }
+  .bar-num{ font-family:'Space Mono', monospace; font-size:.9rem; color:var(--jade-1); margin-bottom:6px; }
+  .bar-lbl{ font-family:'Cormorant Garamond',serif; font-size:11.5px; color:var(--ink-faint); margin-top:9px; letter-spacing:.06em; }
+
+  .nav-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:22px; }
+  @media(max-width:900px){.nav-grid{grid-template-columns:repeat(2,1fr);}}
+  .nav-card{ padding:16px 18px; cursor:pointer; transition:transform .2s, border-color .2s; }
+  .nav-card:hover{ transform:translateY(-3px); border-color:var(--jade-1); }
+  .nav-card .nc-num{ font-family:'Space Mono',monospace; font-size:11px; color:var(--jade-1); opacity:.8; }
+  .nav-card .nc-t{ font-family:'Playfair Display',serif; font-size:1.02rem; margin-top:4px; color:var(--ink); }
+  .nav-card .nc-s{ font-family:'Cormorant Garamond',serif; font-size:12.5px; color:var(--ink-faint); margin-top:4px; }
+
+  .s2-top{ display:grid; grid-template-columns:1.5fr 1fr; gap:22px; margin-bottom:22px; }
+  @media(max-width:900px){.s2-top{grid-template-columns:1fr;}}
+  .line-chart-svg{ width:100%; height:210px; position:relative; z-index:1; }
+  .line-caption{ display:flex; justify-content:space-between; font-family:'Space Mono', monospace; font-size:10.5px; color:var(--ink-faint); margin-top:6px; flex-wrap:wrap; gap:6px; position:relative; z-index:1; }
+
+  .side-stat{ display:flex; flex-direction:column; gap:14px; justify-content:center; position:relative; z-index:1; }
+  .side-stat .row{ display:flex; align-items:baseline; justify-content:space-between; border-bottom:1px dashed var(--line); padding-bottom:9px; }
+  .side-stat .row:last-child{border-bottom:none;}
+  .side-stat .row .k{ font-family:'Cormorant Garamond',serif; color:var(--ink-dim); font-size:13.5px; }
+  .side-stat .row .v{ font-family:'Space Mono', monospace; color:var(--jade-1); font-weight:700; font-size:1rem; }
+
+  .list-panel{ flex:1; display:flex; flex-direction:column; min-height:0; position:relative; z-index:1; }
+  .list-panel h3{ margin-bottom:12px; }
+  .event-scroll{ flex:1; overflow-y:auto; padding-right:6px; }
+  .event-scroll.capped{ max-height:340px; }
+  .event-scroll::-webkit-scrollbar{ width:5px; }
+  .event-scroll::-webkit-scrollbar-thumb{ background:var(--jade-3); border-radius:3px; }
+
+  .year-scroll{ overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:4px; }
+  .year-scroll::-webkit-scrollbar{ height:5px; }
+  .year-scroll::-webkit-scrollbar-thumb{ background:var(--jade-3); border-radius:3px; }
+  .year-barchart{ display:flex; align-items:flex-end; gap:9px; min-height:170px; padding:8px 6px 46px; }
+  .ybar-col{ flex:0 0 26px; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; cursor:pointer; position:relative; }
+  .ybar-col .bar{ width:100%; min-height:5px; border-radius:3px 3px 0 0; background:linear-gradient(180deg,var(--jade-2),var(--jade-3)); transition:filter .2s, background .2s; }
+  .ybar-col:hover .bar{ filter:brightness(1.25); }
+  .ybar-col.active .bar{ background:linear-gradient(180deg,#ffc862,#ff7a6b); box-shadow:0 0 10px rgba(255,140,90,.45); }
+  .ybar-col .bar-num{ font-family:'Space Mono', monospace; font-size:10px; color:var(--jade-1); margin-bottom:5px; }
+  .ybar-col.active .bar-num{ color:#ffc862; }
+  .ybar-col.active .bar-lbl{ color:#ffc862; }
+  .ybar-col .bar-lbl{ position:absolute; bottom:-40px; left:50%; font-family:'Space Mono', monospace; font-size:10px; color:var(--ink-faint); white-space:nowrap; transform:rotate(-45deg) translateX(-14px); transform-origin:top left; }
+  .year-select{ font-family:'Space Mono', monospace; font-size:12px; letter-spacing:.03em; color:var(--ink-dim); background:var(--glass-2); border:1px solid var(--line); border-radius:20px; padding:8px 16px; cursor:pointer; }
+  .year-select:focus{ outline:1px solid var(--jade-1); }
+
+  @media (max-width:600px) and (orientation:portrait){
+    #eventListAll{
+      height:75vh;
+      max-height:75vh;
+      flex:none;
+      overflow-y:auto;
+      -webkit-overflow-scrolling:touch;
+      border:1px solid var(--line);
+      border-radius:6px;
+      background:var(--glass-2);
+      padding:10px 10px 10px 12px;
+    }
+  }
+  .erow{ display:grid; grid-template-columns:130px 10px 1fr; gap:0 14px; padding:11px 4px; border-bottom:1px solid var(--line); font-family:'Cormorant Garamond',serif; font-size:14px; animation:fadein .35s ease; }
+  @keyframes fadein{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
+  .erow .d{ color:var(--ink-faint); font-size:12px; font-family:'Space Mono', monospace; }
+  .erow .dotcol{ display:flex; justify-content:center; padding-top:4px; }
+  .erow .dotcol span{ width:7px; height:7px; border-radius:50%; display:block; }
+  .erow .t{ color:var(--ink); }
+  .erow .t small{ display:block; color:var(--ink-faint); font-size:12px; margin-top:2px; }
+  .empty-msg{ text-align:center; color:var(--ink-faint); font-family:'Cormorant Garamond',serif; font-style:italic; padding:40px 0; }
+
+  .resetbtn{ font-family:'Space Mono', monospace; font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--jade-1); background:var(--glass-2); backdrop-filter:blur(8px); border:1px solid var(--jade-3); border-radius:16px; padding:5px 14px; cursor:pointer; transition:all .2s; }
+  .resetbtn:hover{ background:rgba(42,217,168,.12); }
+
+  .profile-grid{ display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-bottom:22px; }
+  @media(max-width:900px){.profile-grid{grid-template-columns:1fr;}}
+  .info-rows{ display:flex; flex-direction:column; gap:0; position:relative; z-index:1; }
+  .info-rows .irow{ display:flex; justify-content:space-between; gap:14px; padding:10px 0; border-bottom:1px dashed var(--line); font-size:14.5px; }
+  .info-rows .irow:last-child{ border-bottom:none; }
+  .info-rows .irow .k{ color:var(--ink-faint); flex-shrink:0; }
+  .info-rows .irow .v{ color:var(--ink); text-align:right; font-weight:600; }
+  .family-card{ display:flex; flex-direction:column; gap:12px; position:relative; z-index:1; }
+  .family-item{ display:flex; align-items:baseline; gap:10px; padding:8px 0; border-bottom:1px dashed var(--line); }
+  .family-item:last-child{border-bottom:none;}
+  .family-item .role{ font-family:'Space Mono',monospace; font-size:10.5px; color:var(--jade-1); text-transform:uppercase; letter-spacing:.08em; width:70px; flex-shrink:0; }
+  .family-item.wide .role{ width:92px; }
+  .family-item .nm{ color:var(--ink); font-size:15px; }
+  .family-item .dt{ color:var(--ink-faint); font-size:12.5px; display:block; }
+
+  .stat-badge{ display:inline-flex; align-items:center; gap:10px; padding:12px 20px; border-radius:24px; border:1px solid var(--jade-1); background:rgba(42,217,168,.08); color:var(--mint); font-family:'Cormorant Garamond',serif; font-size:15px; margin-top:6px; }
+  .stat-badge .dotok{width:8px;height:8px;border-radius:50%;background:var(--emerald); box-shadow:0 0 8px var(--emerald);}
+
+  .metric-grid{ display:grid; grid-template-columns:repeat(6,1fr); gap:14px; margin-bottom:6px; }
+  @media(max-width:1000px){ .metric-grid{ grid-template-columns:repeat(3,1fr); } }
+  @media(max-width:600px){ .metric-grid{ grid-template-columns:repeat(2,1fr); } }
+  .metric-card{ padding:20px 14px; text-align:center; border-radius:14px; }
+  .metric-num{ font-family:'Space Mono',monospace; font-weight:700; font-size:2.1rem; line-height:1; }
+  .metric-lbl{ margin-top:8px; font-size:13px; color:var(--ink); font-family:'Cormorant Garamond',serif; font-weight:600; }
+  .metric-lbl span{ display:block; margin-top:2px; font-family:'Space Mono',monospace; font-size:10px; color:var(--ink-faint); font-weight:400; text-transform:none; letter-spacing:.01em; }
+  .radar-wrap{ display:flex; justify-content:center; padding:10px 0 4px; }
+  .radar-svg{ width:100%; max-width:420px; height:auto; }
+  .phase-block{ margin-bottom:8px; }
+  .phase-title{ font-family:'Playfair Display',serif; font-size:1.08rem; color:var(--mint); margin:0 0 16px; display:flex; align-items:center; gap:12px; position:relative; z-index:1; }
+  .phase-title .ph-badge{ font-family:'Space Mono',monospace; font-size:10.5px; letter-spacing:.06em; color:var(--ink-faint); border:1px solid var(--line); padding:3px 11px; border-radius:12px; text-transform:uppercase; }
+  .ctimeline{ position:relative; margin-left:8px; }
+  .ct-item{ display:grid; grid-template-columns:22px 1fr; column-gap:12px; position:relative; z-index:1; }
+  .ct-item .ct-rail{ position:relative; display:flex; justify-content:center; }
+  .ct-item .ct-rail::before{ content:''; position:absolute; top:13px; bottom:-22px; left:50%; width:2px; transform:translateX(-50%); background:var(--line-strong); }
+  .ct-item:last-child .ct-rail::before{ display:none; }
+  .ct-item .ct-dot{ width:10px; height:10px; margin-top:3px; border-radius:50%; background:var(--jade-5); border:2.5px solid var(--mint); box-shadow:0 0 8px rgba(122,255,224,.5); flex-shrink:0; }
+  .ct-item .ct-body{ padding-bottom:22px; }
+  .ct-item:last-child .ct-body{ padding-bottom:2px; }
+  .ct-item .ct-date{ font-family:'Space Mono',monospace; font-size:11.5px; color:var(--mint); letter-spacing:.03em; }
+  .ct-item .ct-unit{ font-weight:600; margin:4px 0 2px; font-size:15px; color:var(--ink); font-family:'Cormorant Garamond',serif; }
+  .ct-item .ct-role{ color:var(--ink-dim); font-size:13.5px; }
+  .ct-item .ct-dec{ font-family:'Space Mono',monospace; font-size:10.5px; color:var(--ink-faint); margin-top:4px; }
+  .phase-cols{ display:grid; grid-template-columns:1fr 1fr; gap:22px; align-items:start; }
+  @media(max-width:900px){ .phase-cols{ grid-template-columns:1fr; } }
+
+  footer{ text-align:center; padding:32px 0 20px; font-family:'Space Mono', monospace; color:var(--ink-faint); font-size:11px; letter-spacing:.05em; }
+  .footer-name{
+    font-family:Tahoma, 'Segoe UI', Arial, sans-serif;
+    font-weight:800;
+    font-size:clamp(1.6rem,3vw,2.2rem);
+    letter-spacing:.02em;
+    margin-bottom:10px;
+  }
+  .footer-contact{
+    font-family:'Cormorant Garamond', serif;
+    font-size:16px;
+    color:var(--ink-dim);
+    line-height:1.7;
+    margin-bottom:18px;
+  }
+  .footer-credit{ font-family:'Space Mono', monospace; color:var(--ink-faint); font-size:11px; letter-spacing:.05em; }
+  a[href^="tel:"], a[href^="mailto:"], a[href^="sms:"], a[x-apple-data-detectors]{
+    color:inherit !important; text-decoration:none !important; font:inherit !important;
+  }
+  @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
+</style>
+</head>
+<body>
+
+<div id="bgFixed"></div>
+<div id="bgGlow"></div>
+
+<!-- ============ SCREEN 1 — TỔNG QUAN ============ -->
+<section class="screen" id="s1">
+  <div class="topbar">
+    <div>
+      <div class="eyebrow">Dashboard số liệu hồ sơ hành chính</div>
+      <h1 class="gold-text name-title">Đinh Thị Xuân</h1>
+      <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:14px;">
+        <div class="subtitle-box" style="margin-top:0;"><span class="gold-text">Tổng quan</span></div>
+        <button class="collapse-btn" id="collapseAllBtn">⌄ Thu gọn tất cả</button>
+      </div>
+      <div class="id-row">
+        <div class="id-chip"><b>Sinh</b>20/05/1980</div>
+        <div class="id-chip"><b>SĐT</b>0988 455 685</div>
+        <div class="id-chip"><b>Email</b>thanhxuanyenhoa@gmail.com</div>
+        <div class="id-chip"><b>CCCD</b>017180009596</div>
+        <div class="id-chip"><b>Nghề nghiệp</b>Giáo viên Mầm non</div>
+        <div class="id-chip"><b>Sổ BHXH</b>6106001146</div>
+        <div class="id-chip"><b>Nơi ở hiện tại</b>Thôn Yên Hòa, xã Yên Thủy, tỉnh Phú Thọ</div>
+        <div class="id-chip"><b>Đơn vị CT (2025–nay)</b>Trường Mầm non Lạc Thịnh</div>
+      </div>
+    </div>
+    <div style="display:flex; flex-direction:column; align-items:flex-end; gap:10px;">
+      <div class="pageflag">Trang <b>01</b> / 10</div>
+      <button class="collapse-btn" id="jumpBottomBtn" onclick="document.getElementById('docFooter').scrollIntoView({behavior:'smooth'})">↓ Xuống cuối tài liệu</button>
+    </div>
+  </div>
+
+  <div class="kpi-row" id="kpiRow"></div>
+
+  <div class="chart-row">
+    <div class="panel glass">
+      <h3>Phân bổ theo nhóm <span class="tag mono" id="donutTag">n = —</span></h3>
+      <div class="donut-wrap">
+        <div class="donut" id="donutEl"><div class="donut-center"><div class="n" id="donutN">—</div><div class="t">Sự kiện</div></div></div>
+        <ul class="legend" id="legendEl"></ul>
+      </div>
+    </div>
+    <div class="panel glass">
+      <h3>Số sự kiện theo thập kỷ <span class="tag">1980 – 2025</span></h3>
+      <div class="barchart" id="decadeChart"></div>
+    </div>
+  </div>
+
+  <div class="mono" style="font-weight:700; font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--jade-1); margin:30px 0 4px;">Mục lục</div>
+  <div class="nav-grid" id="navGrid"></div>
+</section>
+
+<!-- ============ SCREEN 2 — HỒ SƠ CÁ NHÂN ============ -->
+<section class="screen" id="s2">
+  <div class="topbar">
+    <div>
+      <div class="eyebrow">Thông tin cá nhân cơ bản</div>
+      <h1 class="gold-text"><span class="sec-num">I.</span>Hồ sơ cá nhân</h1>
+    </div>
+    <div class="topbar-right">
+      <div class="pageflag">Trang <b>02</b> / 10</div>
+      <button class="collapse-btn" data-target="s2">⌄ Thu gọn</button>
+    </div>
+  </div>
+
+  <div class="profile-grid">
+    <div class="panel glass">
+      <h3><span class="sub-num">1.</span>Thông tin định danh</h3>
+      <div class="info-rows">
+        <div class="irow"><span class="k">Họ và tên khai sinh</span><span class="v">Đinh Thị Xuân</span></div>
+        <div class="irow"><span class="k">Ngày sinh</span><span class="v">20/05/1980</span></div>
+        <div class="irow"><span class="k">Giới tính</span><span class="v">Nữ</span></div>
+        <div class="irow"><span class="k">Nghề nghiệp</span><span class="v">Giáo viên Mầm non</span></div>
+        <div class="irow"><span class="k">Số CCCD</span><span class="v">017180009596</span></div>
+        <div class="irow"><span class="k">SĐT / Email</span><span class="v">0988455685 / thanhxuanyenhoa@gmail.com</span></div>
+        <div class="irow"><span class="k">Quê quán bên ngoại</span><span class="v">Xã Hữu Lợi, Yên Thủy, Hòa Bình</span></div>
+        <div class="irow"><span class="k">Nơi thường trú</span><span class="v">Thôn Yên Hòa, xã Yên Thủy, tỉnh Phú Thọ<small style="display:block;font-weight:400;color:var(--ink-faint);font-size:11px;margin-top:2px;">trước sáp nhập: Yên Hòa, Yên Lạc, Yên Thủy, Hòa Bình</small></span></div>
+        <div class="irow"><span class="k">Đăng ký khai sinh (trích lục)</span><span class="v">Số 028/2004</span></div>
+        <div class="irow"><span class="k">Giấy chứng nhận kết hôn</span><span class="v">10/01/2005</span></div>
+        <div class="irow"><span class="k">Số sổ BHXH</span><span class="v">6106001146</span></div>
+      </div>
+    </div>
+    <div class="panel glass">
+      <h3><span class="sub-num">2.</span>Gia đình</h3>
+      <div class="family-card">
+        <div class="family-item"><span class="role">Chồng</span><span class="nm">Đỗ Văn Thìn<span class="dt">Sinh 27/02/1976 · Giáo viên tiểu học</span></span></div>
+        <div class="family-item"><span class="role">Con trai</span><span class="nm">Đỗ Tiến Mạnh<span class="dt">Sinh 27/11/2006</span></span></div>
+        <div class="family-item"><span class="role">Con gái</span><span class="nm">Đỗ Thị Mỹ Vân<span class="dt">Sinh 20/05/2012</span></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="profile-grid">
+    <div class="panel glass">
+      <h3><span class="sub-num">3.</span>Gia đình bên nội <span class="tag mono">Bố mẹ &amp; anh chị em bên chồng</span></h3>
+      <div class="family-card">
+        <div class="family-item wide"><span class="role">Bố (chồng)</span><span class="nm">Đỗ Quốc Đính<span class="dt">Sinh 1949 · Giáo viên hưu trí</span></span></div>
+        <div class="family-item wide"><span class="role">Mẹ (chồng)</span><span class="nm">Trần Thị An<span class="dt">Sinh 1952 · Giáo viên hưu trí</span></span></div>
+        <div class="family-item wide"><span class="role">Anh (chồng)</span><span class="nm">Đỗ Văn Bính<span class="dt">Sinh 1973 · Lái xe, định cư tại Praha, CH Séc</span></span></div>
+        <div class="family-item wide"><span class="role">Em (chồng)</span><span class="nm">Đỗ Thị Lan Hương<span class="dt">Sinh 1979 · GV Trường TH&amp;THCS Lạc Thịnh</span></span></div>
+        <div class="family-item wide"><span class="role">Em (chồng)</span><span class="nm">Đỗ Văn Dũng<span class="dt">Sinh 1980 · GV Trường TH&amp;THCS Yên Trị</span></span></div>
+      </div>
+      <div class="line-caption" style="margin-top:14px;"><span>Quê chồng: xã Yên Trị, Ý Yên, Nam Định</span><span>Bố mẹ chồng hiện cư trú: Yên Hòa, Yên Lạc, Yên Thủy, Hòa Bình</span></div>
+    </div>
+    <div class="panel glass">
+      <h3><span class="sub-num">4.</span>Gia đình bên ngoại <span class="tag mono">Bố mẹ &amp; các em ruột của bà Xuân</span></h3>
+      <div class="family-card">
+        <div class="family-item wide"><span class="role">Bố đẻ</span><span class="nm">Đinh Văn Ân<span class="dt">Sinh 1958 · Làm ruộng, xã Hữu Lợi, Yên Thủy</span></span></div>
+        <div class="family-item wide"><span class="role">Mẹ đẻ</span><span class="nm">Bùi Thị Út<span class="dt">Sinh 1958 · Làm ruộng, xã Bảo Hiệu, Yên Thủy</span></span></div>
+        <div class="family-item wide"><span class="role">Em trai</span><span class="nm">Đinh Văn Tuấn<span class="dt">Sinh 1981 · Làm ruộng, Hữu Lợi</span></span></div>
+        <div class="family-item wide"><span class="role">Em trai</span><span class="nm">Đinh Văn Tài<span class="dt">Sinh 1983 · Làm ruộng, Hữu Lợi</span></span></div>
+        <div class="family-item wide"><span class="role">Em gái</span><span class="nm">Đinh Thị Anh<span class="dt">Sinh 1984 · Làm ruộng, Hữu Lợi</span></span></div>
+        <div class="family-item wide"><span class="role">Em gái</span><span class="nm">Đinh Thị Sơn<span class="dt">Sinh 1986 · Làm ruộng, Hữu Lợi</span></span></div>
+      </div>
+      <div class="line-caption" style="margin-top:14px;"><span>Quê ngoại: xã Hữu Lợi, Yên Thủy, Hòa Bình</span></div>
+    </div>
+  </div>
+
+  <div class="panel glass list-panel" style="flex:1;">
+    <h3><span class="sub-num">5.</span>Dòng thời gian sự kiện cá nhân <span class="tag" id="tagCaNhan"></span></h3>
+    <div class="event-scroll" id="listCaNhan"></div>
+  </div>
+</section>
+
+<!-- ============ SCREEN 3 — HỌC VẤN ============ -->
+<section class="screen" id="s3">
+  <div class="topbar">
+    <div>
+      <div class="eyebrow">Quá trình học tập &amp; chứng chỉ</div>
+      <h1 class="gold-text"><span class="sec-num">II.</span>Học vấn</h1>
+    </div>
+    <div class="topbar-right">
+      <div class="pageflag">Trang <b>03</b> / 10</div>
+      <button class="collapse-btn" data-target="s3">⌄ Thu gọn</button>
+    </div>
+  </div>
+  <div class="kpi-row" id="kpiHocVan"></div>
+  <div class="panel glass list-panel" style="flex:1;">
+    <h3><span class="sub-num">1.</span>Dòng thời gian học vấn &amp; chứng chỉ <span class="tag" id="tagHocVan"></span></h3>
+    <div class="event-scroll" id="listHocVan"></div>
+  </div>
+</section>
+
+<!-- ============ SCREEN 4 — QUÁ TRÌNH CÔNG TÁC ============ -->
+<section class="screen" id="s4">
+  <div class="topbar">
+    <div>
+      <div class="eyebrow">Diễn biến quá trình công tác &amp; đơn vị</div>
+      <h1 class="gold-text"><span class="sec-num">III.</span>Quá trình công tác</h1>
+    </div>
+    <div class="topbar-right">
+      <div class="pageflag">Trang <b>04</b> / 10</div>
+      <button class="collapse-btn" data-target="s4">⌄ Thu gọn</button>
+    </div>
+  </div>
+  <div class="s2-top">
+    <div class="panel glass side-stat">
+      <h3 style="margin-bottom:6px;"><span class="sub-num">1.</span>Chặng đường công tác</h3>
+      <div class="row"><span class="k">Công tác tại Lai Châu (Sìn Hồ)</span><span class="v" style="color:var(--coral);">2004 – 2010</span></div>
+      <div class="row"><span class="k">Trường Mầm non Yên Lạc, Hòa Bình</span><span class="v" style="color:var(--jade-1);">2011 – 2025</span></div>
+      <div class="row"><span class="k">Trường Mầm non Lạc Thịnh, Phú Thọ</span><span class="v" style="color:var(--emerald);">2025 – nay</span></div>
+      <div class="row"><span class="k">Số đơn vị công tác đã qua</span><span class="v" id="soDonVi">—</span></div>
+    </div>
+    <div class="panel glass side-stat">
+      <h3 style="margin-bottom:6px;"><span class="sub-num">2.</span>Mốc then chốt</h3>
+      <div class="row"><span class="k">Tuyển dụng công chức</span><span class="v">25/08/2004</span></div>
+      <div class="row"><span class="k">Công nhận hết tập sự</span><span class="v">15/05/2006</span></div>
+      <div class="row"><span class="k">Tiếp nhận về Hòa Bình</span><span class="v">01/01/2011</span></div>
+      <div class="row"><span class="k">Đơn vị hiện tại</span><span class="v" style="color:var(--jade-1);">Mầm non Lạc Thịnh</span></div>
+    </div>
+  </div>
+  <div class="panel glass list-panel" style="flex:1;">
+    <h3><span class="sub-num">3.</span>Dòng thời gian công tác <span class="tag" id="tagCongTac"></span></h3>
+    <div class="event-scroll" id="listCongTac"></div>
+  </div>
+</section>
+
+<!-- ============ SCREEN 5 — DIỄN BIẾN LƯƠNG ============ -->
+<section class="screen" id="s5">
+  <div class="topbar">
+    <div>
+      <div class="eyebrow">Diễn biến bậc lương &amp; chức danh nghề nghiệp</div>
+      <h1 class="gold-text"><span class="sec-num">IV.</span>Diễn biến lương</h1>
+    </div>
+    <div class="topbar-right">
+      <div class="pageflag">Trang <b>05</b> / 10</div>
+      <button class="collapse-btn" data-target="s5">⌄ Thu gọn</button>
+    </div>
+  </div>
+  <div class="s2-top">
+    <div class="panel glass">
+      <h3><span class="sub-num">1.</span>Tiến trình bậc lương <span class="tag">2009 → 2024</span></h3>
+      <svg class="line-chart-svg" id="salaryChart" viewBox="0 0 600 240" preserveAspectRatio="none"></svg>
+      <div class="line-caption"><span>07/2009 — Bậc 3</span><span>2023 — Chuyển hạng III</span><span>06/2024 — Bậc 7 (Hạng III)</span></div>
+    </div>
+    <div class="panel glass side-stat">
+      <h3 style="margin-bottom:6px;"><span class="sub-num">2.</span>Chỉ số liên quan</h3>
+      <div class="row"><span class="k">Mã ngạch khởi điểm (Hạng IV)</span><span class="v" style="color:var(--sapphire);">V.07.02.06</span></div>
+      <div class="row"><span class="k">Mã ngạch hiện tại (Hạng III)</span><span class="v" style="color:var(--emerald);">V.07.02.26</span></div>
+      <div class="row"><span class="k">Bậc lương hiện hưởng</span><span class="v" style="color:var(--amber);">Bậc 7</span></div>
+      <div class="row"><span class="k">Số lần nâng bậc/chuyển hạng</span><span class="v" id="soLanNang">—</span></div>
+    </div>
+  </div>
+  <div class="panel glass list-panel" style="flex:1;">
+    <h3><span class="sub-num">3.</span>Chi tiết các lần xếp/nâng lương &amp; bổ nhiệm CDNN <span class="tag" id="tagLuong"></span></h3>
+    <div class="event-scroll" id="listLuong"></div>
+  </div>
+</section>
+
+<!-- ============ SCREEN 6 — PHỤ CẤP THÂM NIÊN ============ -->
+<section class="screen" id="s6">
+  <div class="topbar">
+    <div>
+      <div class="eyebrow">Diễn biến phụ cấp thâm niên nhà giáo</div>
+      <h1 class="gold-text"><span class="sec-num">V.</span>Phụ cấp thâm niên</h1>
+    </div>
+    <div class="topbar-right">
+      <div class="pageflag">Trang <b>06</b> / 10</div>
+      <button class="collapse-btn" data-target="s6">⌄ Thu gọn</button>
+    </div>
+  </div>
+  <div class="s2-top">
+    <div class="panel glass">
+      <h3><span class="sub-num">1.</span>Tỷ lệ phụ cấp thâm niên <span class="tag">2012 → 2025</span></h3>
+      <svg class="line-chart-svg" id="seniorityChart" viewBox="0 0 600 240" preserveAspectRatio="none"></svg>
+      <div class="line-caption"><span>08/2012 — 7%</span><span>2015 — 10%</span><span>05/2025 — 20%</span></div>
+    </div>
+    <div class="panel glass side-stat">
+      <h3 style="margin-bottom:6px;"><span class="sub-num">2.</span>Ghi chú tính thâm niên</h3>
+      <div class="row"><span class="k">Bắt đầu tính từ</span><span class="v" style="color:var(--jade-1);">25/08/2004</span></div>
+      <div class="row"><span class="k">Tỷ lệ hiện hưởng (2025)</span><span class="v" style="color:var(--amber);">20%</span></div>
+      <div class="row"><span class="k">Số lần điều chỉnh tỷ lệ</span><span class="v" id="soLanDieuChinh">—</span></div>
+      <div class="row"><span class="k">Số năm tính đến 2026</span><span class="v" style="color:var(--coral);">22 năm</span></div>
+    </div>
+  </div>
+  <div class="panel glass list-panel" style="flex:1;">
+    <h3><span class="sub-num">3.</span>Diễn biến chi tiết theo năm <span class="tag" id="tagThamNien"></span></h3>
+    <div class="event-scroll" id="listThamNien"></div>
+  </div>
+</section>
+
+<!-- ============ SCREEN 7 — THI ĐUA KHEN THƯỞNG ============ -->
+<section class="screen" id="s7">
+  <div class="topbar">
+    <div>
+      <div class="eyebrow">Thi đua khen thưởng &amp; kỷ luật</div>
+      <h1 class="gold-text"><span class="sec-num">VI.</span>Khen thưởng &amp; Kỷ luật</h1>
+    </div>
+    <div class="topbar-right">
+      <div class="pageflag">Trang <b>07</b> / 10</div>
+      <button class="collapse-btn" data-target="s7">⌄ Thu gọn</button>
+    </div>
+  </div>
+
+  <div class="panel glass" style="margin-bottom:22px;">
+    <h3 style="margin-bottom:10px;"><span class="sub-num">1.</span>Kỷ luật</h3>
+    <div class="stat-badge"><span class="dotok"></span>Không vi phạm bất cứ hình thức kỷ luật nào trong suốt quá trình công tác</div>
+  </div>
+
+  <div class="panel glass list-panel" style="flex:1;">
+    <h3><span class="sub-num">2.</span>Danh sách thành tích thi đua khen thưởng <span class="tag" id="tagKhenThuong"></span></h3>
+    <div class="event-scroll" id="listKhenThuong"></div>
+  </div>
+</section>
+
+<!-- ============ SCREEN 8 — ĐẢNG & TỔNG HỢP ============ -->
+<section class="screen" id="s8">
+  <div class="topbar">
+    <div>
+      <div class="eyebrow">Công tác Đảng &amp; danh sách tổng hợp toàn bộ hồ sơ</div>
+      <h1 class="gold-text"><span class="sec-num">VII.</span>Công tác Đảng &amp; Tổng hợp</h1>
+    </div>
+    <div class="topbar-right">
+      <div class="pageflag">Trang <b>08</b> / 10</div>
+      <button class="collapse-btn" data-target="s8">⌄ Thu gọn</button>
+    </div>
+  </div>
+
+  <div class="panel glass" style="margin-bottom:22px;">
+    <h3><span class="sub-num">1.</span>Dòng thời gian công tác Đảng</h3>
+    <div class="event-scroll" id="listDang" style="max-height:140px;"></div>
+  </div>
+
+  <div class="panel glass" style="margin-bottom:22px;">
+    <h3><span class="sub-num">2.</span>Bộ lọc sự kiện <span class="tag mono">theo nhóm dữ liệu &amp; theo năm — kết hợp cả hai</span></h3>
+    <div class="filters" id="filterRowAll" style="margin-bottom:18px;"></div>
+    <div class="year-scroll">
+      <div class="year-barchart" id="yearChart"></div>
+    </div>
+    <div class="filters" id="yearFilterRow" style="align-items:center; margin-top:4px; margin-bottom:0;">
+      <select class="year-select" id="yearSelect"></select>
+      <button class="resetbtn" id="resetBtnAll">Xóa toàn bộ lọc</button>
+    </div>
+  </div>
+
+  <div class="panel glass list-panel" style="flex:1;">
+    <h3><span class="sub-num">3.</span>Toàn bộ sự kiện hồ sơ <span class="tag" id="filterTagAll">đang xem: Tất cả</span></h3>
+    <div class="event-scroll" id="eventListAll"></div>
+  </div>
+</section>
+
+<!-- ============ SCREEN 9 — DÒNG THỜI GIAN 2 CHẶNG CÔNG TÁC ============ -->
+<section class="screen" id="s9">
+  <div class="topbar">
+    <div>
+      <div class="eyebrow">Dòng thời gian chi tiết theo 2 chặng đường công tác</div>
+      <h1 class="gold-text"><span class="sec-num">VIII.</span>Dòng thời gian 2 chặng</h1>
+    </div>
+    <div class="topbar-right">
+      <div class="pageflag">Trang <b>09</b> / 10</div>
+      <button class="collapse-btn" data-target="s9">⌄ Thu gọn</button>
+    </div>
+  </div>
+
+  <div class="phase-cols" style="flex:1;">
+
+    <div class="panel glass phase-block">
+      <div class="phase-title"><span class="sub-num">1.</span>Lai Châu <span class="ph-badge">2004 – 2010</span></div>
+      <div class="ctimeline">
+        <div class="ct-item">
+          <div class="ct-rail"><span class="ct-dot"></span></div>
+          <div class="ct-body">
+            <div class="ct-date">25/08/2004</div>
+            <div class="ct-unit">Tuyển dụng công chức</div>
+            <div class="ct-role">Nhận công tác tại huyện Sìn Hồ, tỉnh Lai Châu</div>
+            <div class="ct-dec">QĐ 52/QĐ-SNV</div>
+          </div>
+        </div>
+        <div class="ct-item">
+          <div class="ct-rail"><span class="ct-dot"></span></div>
+          <div class="ct-body">
+            <div class="ct-date">15/05/2006</div>
+            <div class="ct-unit">Công nhận hết thời gian tập sự</div>
+            <div class="ct-role">Công chức nhà nước, huyện Sìn Hồ</div>
+            <div class="ct-dec">QĐ 95/QĐ-UBND</div>
+          </div>
+        </div>
+        <div class="ct-item">
+          <div class="ct-rail"><span class="ct-dot"></span></div>
+          <div class="ct-body">
+            <div class="ct-date">10/07/2009</div>
+            <div class="ct-unit">Cử đi học Đại học Sư phạm</div>
+            <div class="ct-role">Ngành Giáo dục Mầm non</div>
+            <div class="ct-dec">QĐ 52/QĐ-GD&amp;ĐT</div>
+          </div>
+        </div>
+        <div class="ct-item">
+          <div class="ct-rail"><span class="ct-dot"></span></div>
+          <div class="ct-body">
+            <div class="ct-date">17/12/2010 – 20/12/2010</div>
+            <div class="ct-unit">Tiếp nhận về tỉnh Hòa Bình &amp; thuyên chuyển khỏi Lai Châu</div>
+            <div class="ct-role">Kết thúc chặng công tác tại Lai Châu</div>
+            <div class="ct-dec">QĐ 1268/QĐ-SNV · QĐ 1473/QĐ-SNV</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel glass phase-block">
+      <div class="phase-title"><span class="sub-num">2.</span>Hòa Bình → Phú Thọ <span class="ph-badge">2011 – nay</span></div>
+      <div class="ctimeline">
+        <div class="ct-item">
+          <div class="ct-rail"><span class="ct-dot"></span></div>
+          <div class="ct-body">
+            <div class="ct-date">01/01/2011 – 2025</div>
+            <div class="ct-unit">Trường Mầm non Yên Lạc</div>
+            <div class="ct-role">Huyện Yên Thủy, tỉnh Hòa Bình · Giáo viên trực tiếp giảng dạy</div>
+            <div class="ct-dec">QĐ tiếp nhận, điều động 110/QĐ-GD</div>
+          </div>
+        </div>
+        <div class="ct-item">
+          <div class="ct-rail"><span class="ct-dot"></span></div>
+          <div class="ct-body">
+            <div class="ct-date">31/12/2016</div>
+            <div class="ct-unit">Bổ nhiệm CDNN Giáo viên Mầm non Hạng IV</div>
+            <div class="ct-role">Mã V.07.02.06</div>
+            <div class="ct-dec">QĐ 3989/QĐ-UBND</div>
+          </div>
+        </div>
+        <div class="ct-item">
+          <div class="ct-rail"><span class="ct-dot"></span></div>
+          <div class="ct-body">
+            <div class="ct-date">18/01/2023</div>
+            <div class="ct-unit">Bổ nhiệm &amp; xếp lương CDNN Hạng III</div>
+            <div class="ct-role">Mã V.07.02.26</div>
+            <div class="ct-dec">QĐ 446/QĐ-UBND</div>
+          </div>
+        </div>
+        <div class="ct-item">
+          <div class="ct-rail"><span class="ct-dot"></span></div>
+          <div class="ct-body">
+            <div class="ct-date">22/01/2025</div>
+            <div class="ct-unit">Trường Mầm non Lạc Thịnh</div>
+            <div class="ct-role" style="color:var(--jade-1);">Đơn vị công tác hiện tại — theo QĐ điều động 305/QĐ-UBND</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ SCREEN 10 — CHỈ SỐ TỔNG HỢP ============ -->
+<section class="screen" id="s10">
+  <div class="topbar">
+    <div>
+      <div class="eyebrow">Tổng hợp các chỉ số nổi bật của toàn bộ hồ sơ</div>
+      <h1 class="gold-text"><span class="sec-num">IX.</span>Chỉ số tổng hợp</h1>
+    </div>
+    <div class="topbar-right">
+      <div class="pageflag">Trang <b>10</b> / 10</div>
+      <button class="collapse-btn" data-target="s10">⌄ Thu gọn</button>
+    </div>
+  </div>
+
+  <div class="metric-grid">
+    <div class="metric-card glass"><div class="metric-num" style="color:var(--sapphire);">46</div><div class="metric-lbl">Tuổi<span>(Năm 2026)</span></div></div>
+    <div class="metric-card glass"><div class="metric-num" style="color:var(--emerald);">22</div><div class="metric-lbl">Tuổi nghề<span>(2026 − 2004)</span></div></div>
+    <div class="metric-card glass"><div class="metric-num" style="color:var(--amber);">3</div><div class="metric-lbl">Đơn vị công tác<span>đã từng công tác</span></div></div>
+    <div class="metric-card glass"><div class="metric-num" style="color:var(--mint);">8</div><div class="metric-lbl">Lần nâng bậc lương<span>từ 2009 đến nay</span></div></div>
+    <div class="metric-card glass"><div class="metric-num" style="color:var(--coral);">3</div><div class="metric-lbl">Danh hiệu<span>Lao động tiên tiến</span></div></div>
+    <div class="metric-card glass"><div class="metric-num" style="color:var(--jade-1);">8</div><div class="metric-lbl">Chứng chỉ<span>văn bằng, chứng nhận</span></div></div>
+  </div>
+
+  <div class="panel glass" style="margin-top:20px;">
+    <h3>Biểu đồ radar — tổng quan các chỉ số <span class="tag mono">Chuẩn hóa theo thang riêng từng chỉ số</span></h3>
+    <div class="radar-wrap">
+      <svg viewBox="0 0 300 300" class="radar-svg" id="radarChart"></svg>
+    </div>
+  </div>
+</section>
+
+<footer id="docFooter">
+  <div class="footer-name gold-text">Đinh Thị Xuân</div>
+  <div class="footer-contact">Giáo viên Mầm non · Trường Mầm non Lạc Thịnh</div>
+  <div class="footer-credit">DASHBOARD SỐ LIỆU · TỔNG HỢP TỪ HỒ SƠ HÀNH CHÍNH CÁ NHÂN, 1980–2026 · YÊN THỦY, PHÚ THỌ</div>
+  <button class="collapse-btn" style="margin-top:16px;" onclick="document.getElementById('s1').scrollIntoView({behavior:'smooth'})">↑ Lên đầu tài liệu</button>
+</footer>
+
+<script>
+/* ===================== DỮ LIỆU GỐC ===================== */
+const data = [
+  // ---- CÁ NHÂN ----
+  {y:1980, d:"20/05/1980", t:"Ngày sinh", s:"Theo hồ sơ gia đình", cat:"Cá nhân"},
+  {y:2004, d:"08/07/2004", t:"Đăng ký khai sinh (trích lục)", s:"Giấy khai sinh số 028/2004; bản sao trích lục 29/03/2024", cat:"Cá nhân"},
+  {y:2005, d:"10/01/2005", t:"Giấy chứng nhận kết hôn", s:"Với ông Đỗ Văn Thìn, Quyển số 0000", cat:"Cá nhân"},
+  {y:2006, d:"27/11/2006", t:"Con trai chào đời", s:"Đỗ Tiến Mạnh", cat:"Cá nhân"},
+  {y:2012, d:"20/05/2012", t:"Con gái chào đời", s:"Đỗ Thị Mỹ Vân", cat:"Cá nhân"},
+  {y:2014, d:"21/07/2014", t:"Cấp sổ Bảo hiểm xã hội", s:"Số 6106001146", cat:"Cá nhân"},
+  {y:2015, d:"Tháng 11/2015", t:"Cấp Giấy chứng nhận QSDĐ", s:"Thửa đất số 325, đồng sở hữu cùng ông Đỗ Văn Thìn, số vào sổ CH 04851", cat:"Cá nhân"},
+
+  // ---- HỌC VẤN ----
+  {y:1995, d:"30/06/1995", t:"Tốt nghiệp Phổ thông Cơ sở", s:"Bằng tốt nghiệp số 628184/PT90", cat:"Học vấn"},
+  {y:2004, d:"08/2004", t:"Tốt nghiệp Trung học Chuyên nghiệp Sư phạm Mầm non", s:"Bằng số D 0323127, theo QĐ 126 ngày 16/03/2004", cat:"Học vấn"},
+  {y:2012, d:"01/02/2012", t:"Tốt nghiệp Đại học Sư phạm (GD Mầm non, VLVH)", s:"Bằng cử nhân số 096375, số vào sổ 550/15/QĐ-ĐHTB-ĐT/2012", cat:"Học vấn"},
+  {y:2015, d:"22/06/2015", t:"Chứng chỉ Ngoại ngữ trình độ A", s:"Tiếng Anh, số 5.058/EAC", cat:"Học vấn"},
+  {y:2018, d:"31/01/2018", t:"Chứng nhận Bồi dưỡng CDNN GVMN Hạng III", s:"Số 11634/GVMN III", cat:"Học vấn"},
+  {y:2018, d:"18/10/2018", t:"Chứng chỉ Tiếng Anh Bậc 2 (A2)", s:"Theo khung CEFR, số 18.14277", cat:"Học vấn"},
+  {y:2021, d:"22/10/2021", t:"Chứng nhận Bồi dưỡng thường xuyên GVMN 2020–2021", s:"Số 226/QĐ-CĐSP", cat:"Học vấn"},
+  {y:2022, d:"19/04/2022", t:"Chứng nhận Bồi dưỡng thường xuyên GVMN 2021–2022", s:"Số 55/QĐ-CĐSP", cat:"Học vấn"},
+
+  // ---- CÔNG TÁC ----
+  {y:2004, d:"25/08/2004", t:"Tuyển dụng công chức, nhận công tác tại Sìn Hồ", s:"QĐ 52/QĐ-SNV, Lai Châu", cat:"Công tác"},
+  {y:2006, d:"15/05/2006", t:"Công nhận hết thời gian tập sự", s:"QĐ 95/QĐ-UBND", cat:"Công tác"},
+  {y:2009, d:"10/07/2009", t:"Cử đi học lớp Đại học Sư phạm ngành GD Mầm non", s:"QĐ 52/QĐ-GD&amp;ĐT", cat:"Công tác"},
+  {y:2010, d:"17/12/2010", t:"Tiếp nhận công chức, viên chức về tỉnh Hòa Bình", s:"QĐ 1268/QĐ-SNV", cat:"Công tác"},
+  {y:2010, d:"20/12/2010", t:"Chuyển công tác, thuyên chuyển khỏi Lai Châu", s:"QĐ 1473/QĐ-SNV", cat:"Công tác"},
+  {y:2011, d:"01/01/2011", t:"Tiếp nhận &amp; điều động về Trường Mầm non Yên Lạc", s:"QĐ 110/QĐ-GD ngày 20/01/2010, hiệu lực 01/01/2011", cat:"Công tác"},
+  {y:2025, d:"22/01/2025", t:"Điều động viên chức về Trường Mầm non Lạc Thịnh", s:"QĐ 305/QĐ-UBND, Yên Thủy, Phú Thọ", cat:"Công tác"},
+
+  // ---- ĐẢNG ----
+  {y:2018, d:"07/12/2018", t:"Kết nạp Đảng (dự bị)", s:"QĐ 1895-QĐ/HU", cat:"Đảng"},
+  {y:2020, d:"07/02/2020", t:"Công nhận đảng viên chính thức", s:"QĐ 2510-QĐ/HU", cat:"Đảng"},
+
+  // ---- LƯƠNG (bậc lương & CDNN) ----
+  {y:2009, d:"20/07/2009", t:"Nâng bậc lương đợt I năm 2009", s:"Từ bậc 2 lên bậc 3, QĐ 320/QĐ-UBND", cat:"Lương", bac:3},
+  {y:2011, d:"01/08/2011", t:"Nâng bậc lương thường xuyên", s:"Từ bậc 3 lên bậc 4, QĐ 1298/QĐ-UBND", cat:"Lương", bac:4},
+  {y:2013, d:"30/07/2013", t:"Nâng bậc lương thường xuyên", s:"Từ bậc 4 lên bậc 5, QĐ 1615/QĐ-UBND", cat:"Lương", bac:5},
+  {y:2015, d:"18/09/2015", t:"Nâng bậc lương thường xuyên", s:"Từ bậc 5 lên bậc 6, QĐ 2378/QĐ-UBND", cat:"Lương", bac:6},
+  {y:2016, d:"31/12/2016", t:"Bổ nhiệm CDNN Giáo viên Mầm non Hạng IV", s:"Mã V.07.02.06, QĐ 3989/QĐ-UBND", cat:"Lương"},
+  {y:2017, d:"29/09/2017", t:"Nâng bậc lương thường xuyên", s:"Từ bậc 6 lên bậc 7, QĐ 1874/QĐ-UBND", cat:"Lương", bac:7},
+  {y:2019, d:"24/07/2019", t:"Nâng bậc lương thường xuyên", s:"Từ bậc 7 lên bậc 8, QĐ 1501/QĐ-UBND", cat:"Lương", bac:8},
+  {y:2021, d:"19/08/2021", t:"Nâng bậc lương thường xuyên", s:"Từ bậc 8 lên bậc 9, QĐ 1673/QĐ-UBND", cat:"Lương", bac:9},
+  {y:2023, d:"18/01/2023", t:"Bổ nhiệm &amp; xếp lương CDNN Giáo viên Mầm non Hạng III", s:"Mã V.07.02.26, QĐ 446/QĐ-UBND", cat:"Lương"},
+  {y:2024, d:"26/06/2024", t:"Nâng bậc lương thường xuyên (Hạng III)", s:"Từ bậc 6 lên bậc 7, QĐ 1902/QĐ-UBND", cat:"Lương", bac:7},
+
+  // ---- LƯƠNG (phụ cấp thâm niên) ----
+  {y:2012, d:"13/08/2012", t:"Hưởng phụ cấp thâm niên 7%", s:"Ghi nhận mức 6%, xét lên 7%, QĐ 1135/QĐ-UBND", cat:"Lương", tn:7},
+  {y:2013, d:"16/07/2013", t:"Nâng phụ cấp thâm niên lên 8%", s:"QĐ 1103/QĐ-UBND", cat:"Lương", tn:8},
+  {y:2014, d:"12/08/2014", t:"Nâng phụ cấp thâm niên lên 9%", s:"QĐ 1400/QĐ-UBND", cat:"Lương", tn:9},
+  {y:2015, d:"Tháng 08/2015", t:"Nâng phụ cấp thâm niên lên 10%", s:"QĐ 1652/QĐ-UBND ngày 26/08/2015", cat:"Lương", tn:10},
+  {y:2024, d:"28/06/2024", t:"Nâng phụ cấp thâm niên lên 19%", s:"Từ 18% lên 19%, QĐ 2429/QĐ-UBND", cat:"Lương", tn:19},
+  {y:2025, d:"21/05/2025", t:"Nâng phụ cấp thâm niên lên 20%", s:"Từ 19% lên 20%, QĐ 1739/QĐ-UBND", cat:"Lương", tn:20},
+
+  // ---- KHEN THƯỞNG ----
+  {y:2020, d:"2019 – 2020", t:"Danh hiệu Lao động Tiên tiến", s:"QĐ 1619/QĐ-UBND ngày 31/08/2020", cat:"Khen thưởng"},
+  {y:2022, d:"2021 – 2022", t:"Danh hiệu Lao động Tiên tiến", s:"QĐ 1414/QĐ-UBND ngày 13/07/2022", cat:"Khen thưởng"},
+  {y:2024, d:"2023 – 2024", t:"Danh hiệu Lao động Tiên tiến", s:"QĐ 2744/QĐ-UBND ngày 19/07/2024", cat:"Khen thưởng"},
+];
+
+const catColor = {"Học vấn":"var(--emerald)","Lương":"var(--amber)","Công tác":"var(--coral)","Cá nhân":"var(--amethyst)","Đảng":"var(--sapphire)","Khen thưởng":"var(--rose)"};
+const catOrder = ["Học vấn","Lương","Công tác","Cá nhân","Đảng","Khen thưởng"];
+const catLabel = {"all":"Tất cả","Học vấn":"Học vấn","Lương":"Lương &amp; phụ cấp","Công tác":"Công tác","Cá nhân":"Cá nhân","Đảng":"Đảng","Khen thưởng":"Khen thưởng"};
+
+/* ===================== HÀM TIỆN ÍCH ===================== */
+function erowHTML(e){
+  return `<div class="erow"><div class="d">${e.d}</div><div class="dotcol"><span style="background:${catColor[e.cat]}"></span></div><div class="t">${e.t}<small>${e.s||""}</small></div></div>`;
+}
+function renderInto(id, items, emptyMsg){
+  const el = document.getElementById(id);
+  if(!el) return;
+  if(items.length===0){ el.innerHTML = `<div class="empty-msg">${emptyMsg||"Không có sự kiện."}</div>`; return; }
+  el.innerHTML = items.slice().sort((a,b)=> (a.y-b.y) ).map(erowHTML).join('');
+}
+
+/* ===================== TRANG 1 — TỔNG QUAN ===================== */
+function renderKPI(){
+  const total = data.length;
+  document.getElementById('kpiRow').innerHTML = `
+    <div class="kpi glass" style="border-left-color:var(--emerald);"><div class="num" style="color:var(--emerald);">${total}</div><div class="lbl">Tổng số sự kiện hồ sơ</div></div>
+    <div class="kpi glass" style="border-left-color:var(--sapphire);"><div class="num" style="color:var(--sapphire);">46</div><div class="lbl">Tuổi (tính đến 2026)</div></div>
+    <div class="kpi glass" style="border-left-color:var(--amber);"><div class="num" style="color:var(--amber);">Bậc 7</div><div class="lbl">Bậc lương hiện tại</div></div>
+    <div class="kpi glass" style="border-left-color:var(--coral);"><div class="num" style="color:var(--coral);">22</div><div class="lbl">Số năm tính thâm niên</div></div>
+  `;
+}
+
+function renderDonut(){
+  const counts = {};
+  catOrder.forEach(c=>counts[c]=0);
+  data.forEach(e=>{ counts[e.cat] = (counts[e.cat]||0)+1; });
+  const total = data.length;
+  let acc = 0;
+  const stops = [];
+  catOrder.forEach(c=>{
+    const deg = counts[c]/total*360;
+    stops.push(`${catColor[c]} ${acc.toFixed(1)}deg ${(acc+deg).toFixed(1)}deg`);
+    acc += deg;
+  });
+  document.getElementById('donutEl').style.background = `conic-gradient(${stops.join(',')})`;
+  document.getElementById('donutN').textContent = total;
+  document.getElementById('donutTag').textContent = `n = ${total}`;
+  document.getElementById('legendEl').innerHTML = catOrder.map(c=>
+    `<li><span><span class="sw" style="background:${catColor[c]}"></span>${catLabel[c]}</span><b>${String(counts[c]).padStart(2,'0')}</b></li>`
+  ).join('');
+}
+
+function renderDecadeBar(){
+  const buckets = {};
+  data.forEach(e=>{ const dec = Math.floor(e.y/10)*10; buckets[dec]=(buckets[dec]||0)+1; });
+  const decades = Object.keys(buckets).map(Number).sort((a,b)=>a-b);
+  const max = Math.max(...decades.map(d=>buckets[d]));
+  document.getElementById('decadeChart').innerHTML = decades.map(d=>{
+    const n = buckets[d];
+    const pct = Math.round(n/max*100);
+    return `<div class="bar-col"><div class="bar-num">${String(n).padStart(2,'0')}</div><div class="bar" style="height:${pct}%"></div><div class="bar-lbl">${d}s</div></div>`;
+  }).join('');
+}
+
+function renderNavGrid(){
+  const cards = [
+    {n:'02', t:'Hồ sơ cá nhân', s:'Định danh, gia đình', target:'s2'},
+    {n:'03', t:'Học vấn', s:'Bằng cấp, chứng chỉ', target:'s3'},
+    {n:'04', t:'Quá trình công tác', s:'Đơn vị, chức vụ', target:'s4'},
+    {n:'05', t:'Diễn biến lương', s:'Bậc lương 2009–2024', target:'s5'},
+    {n:'06', t:'Phụ cấp thâm niên', s:'Tỷ lệ % 2012–2025', target:'s6'},
+    {n:'07', t:'Khen thưởng', s:'Thi đua, kỷ luật', target:'s7'},
+    {n:'08', t:'Đảng &amp; tổng hợp', s:'Lọc theo nhóm &amp; theo năm', target:'s8'},
+    {n:'09', t:'Dòng thời gian 2 chặng', s:'Lai Châu · Hòa Bình – Phú Thọ', target:'s9'},
+    {n:'10', t:'Chỉ số tổng hợp', s:'Tuổi, tuổi nghề, danh hiệu, chứng chỉ', target:'s10'},
+  ];
+  document.getElementById('navGrid').innerHTML = cards.map(c=>
+    `<div class="nav-card glass" data-target="${c.target}"><div class="nc-num">${c.n}</div><div class="nc-t">${c.t}</div><div class="nc-s">${c.s}</div></div>`
+  ).join('');
+  document.querySelectorAll('.nav-card').forEach(el=>{
+    el.addEventListener('click', ()=> document.getElementById(el.dataset.target).scrollIntoView({behavior:'smooth'}));
+  });
+}
+
+/* ===================== TRANG 2 — CÁ NHÂN ===================== */
+function renderCaNhan(){
+  const items = data.filter(e=>e.cat==='Cá nhân');
+  document.getElementById('tagCaNhan').textContent = `${items.length} sự kiện`;
+  renderInto('listCaNhan', items);
+}
+
+/* ===================== TRANG 3 — HỌC VẤN ===================== */
+function renderHocVan(){
+  const items = data.filter(e=>e.cat==='Học vấn');
+  document.getElementById('kpiHocVan').innerHTML = `
+    <div class="kpi glass" style="border-left-color:var(--emerald);"><div class="num" style="color:var(--emerald);">${items.length}</div><div class="lbl">Bằng cấp &amp; chứng chỉ</div></div>
+    <div class="kpi glass" style="border-left-color:var(--jade-1);"><div class="num" style="color:var(--jade-1);">1995–2022</div><div class="lbl">Giai đoạn học tập</div></div>
+    <div class="kpi glass" style="border-left-color:var(--sapphire);"><div class="num" style="color:var(--sapphire);">ĐHSP (VLVH)</div><div class="lbl">Bằng cử nhân</div></div>
+    <div class="kpi glass" style="border-left-color:var(--amber);"><div class="num" style="color:var(--amber);">Hạng III</div><div class="lbl">CDNN hiện giữ</div></div>
+  `;
+  document.getElementById('tagHocVan').textContent = `${items.length} mục`;
+  renderInto('listHocVan', items);
+}
+
+/* ===================== TRANG 4 — CÔNG TÁC ===================== */
+function renderCongTac(){
+  const items = data.filter(e=>e.cat==='Công tác');
+  document.getElementById('soDonVi').textContent = '3 đơn vị';
+  document.getElementById('tagCongTac').textContent = `${items.length} mục`;
+  renderInto('listCongTac', items);
+}
+
+/* ===================== TRANG 5 — LƯƠNG ===================== */
+function drawLineChart(svgId, series, {unit='', decimals=2, colorStops}){
+  const svg = document.getElementById(svgId);
+  const W=600,H=240,padL=44,padR=24,padT=22,padB=34;
+  const xs = series.map(p=>p.y), ys = series.map(p=>p.v);
+  const minX=Math.min(...xs), maxX=Math.max(...xs);
+  const spanY = Math.max(...ys)-Math.min(...ys) || 1;
+  const minY = Math.min(...ys) - spanY*0.12, maxY = Math.max(...ys) + spanY*0.12;
+  const sx = x => padL + (maxX===minX?0:(x-minX)/(maxX-minX)) * (W-padL-padR);
+  const sy = v => H-padB - (v-minY)/(maxY-minY) * (H-padT-padB);
+  const pts = series.map(p=>`${sx(p.y).toFixed(1)},${sy(p.v).toFixed(1)}`).join(' ');
+  const gridLines = [0,0.5,1].map(f=>{
+    const yy = padT + f*(H-padT-padB);
+    return `<line x1="0" y1="${yy.toFixed(1)}" x2="${W}" y2="${yy.toFixed(1)}" stroke="rgba(150,240,210,0.10)" stroke-width="1"/>`;
+  }).join('');
+  const circles = series.map((p,i)=>{
+    const isEdge = i===0 || i===series.length-1;
+    return `<circle cx="${sx(p.y).toFixed(1)}" cy="${sy(p.v).toFixed(1)}" r="${isEdge?6:4}" fill="${colorStops[Math.min(i,colorStops.length-1)]}"/>`;
+  }).join('');
+  const labelFirst = series[0], labelLast = series[series.length-1];
+  const labels = `
+    <text x="${sx(labelFirst.y).toFixed(1)}" y="${(sy(labelFirst.v)+16).toFixed(1)}" fill="#9dc2b6" font-size="11" font-family="Space Mono" text-anchor="middle">${labelFirst.v.toFixed(decimals)}${unit}</text>
+    <text x="${sx(labelLast.y).toFixed(1)}" y="${(sy(labelLast.v)-10).toFixed(1)}" fill="#ff7a6b" font-size="12" font-family="Space Mono" text-anchor="middle" font-weight="bold">${labelLast.v.toFixed(decimals)}${unit}</text>
+  `;
+  svg.innerHTML = `
+    ${gridLines}
+    <defs><linearGradient id="lg-${svgId}" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0a4a3c"/><stop offset="35%" stop-color="#2ad9a8"/><stop offset="70%" stop-color="#ffc862"/><stop offset="100%" stop-color="#ff7a6b"/>
+    </linearGradient></defs>
+    <polyline points="${pts}" fill="none" stroke="url(#lg-${svgId})" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    ${circles}
+    ${labels}
+  `;
+}
+
+function renderLuong(){
+  const salaryPts = data.filter(e=>e.bac!==undefined).sort((a,b)=>a.y-b.y).map(e=>({y:e.y, v:e.bac}));
+  drawLineChart('salaryChart', salaryPts, {unit:'', decimals:0, colorStops:['#2ad9a8','#ffc862','#ff7a6b']});
+  const items = data.filter(e=>e.cat==='Lương' && (e.bac!==undefined || e.t.includes('Bổ nhiệm')));
+  document.getElementById('soLanNang').textContent = items.length + ' lần';
+  document.getElementById('tagLuong').textContent = `${items.length} mục`;
+  renderInto('listLuong', items);
+}
+
+/* ===================== TRANG 6 — THÂM NIÊN ===================== */
+function renderThamNien(){
+  const pts = data.filter(e=>e.tn!==undefined).sort((a,b)=>a.y-b.y).map(e=>({y:e.y, v:e.tn}));
+  drawLineChart('seniorityChart', pts, {unit:'%', decimals:0, colorStops:['#2ad9a8','#ffc862','#ff7a6b']});
+  const items = data.filter(e=>e.tn!==undefined);
+  document.getElementById('soLanDieuChinh').textContent = items.length + ' lần';
+  document.getElementById('tagThamNien').textContent = `${items.length} mục`;
+  renderInto('listThamNien', items);
+}
+
+/* ===================== TRANG 7 — KHEN THƯỞNG ===================== */
+function renderKhenThuong(){
+  const items = data.filter(e=>e.cat==='Khen thưởng');
+  document.getElementById('tagKhenThuong').textContent = `${items.length} mục`;
+  renderInto('listKhenThuong', items);
+}
+
+/* ===================== TRANG 8 — ĐẢNG & TỔNG HỢP ===================== */
+function renderDang(){
+  const items = data.filter(e=>e.cat==='Đảng');
+  renderInto('listDang', items);
+}
+
+/* ===================== TRANG 08 — BỘ LỌC KẾT HỢP (NHÓM × NĂM) ===================== */
+let currentCatAll = 'all';
+let currentYear = 'all';
+
+function renderFilterRowAll(){
+  const counts = {};
+  catOrder.forEach(c=>counts[c]=0);
+  data.forEach(e=>counts[e.cat]++);
+  let html = `<button class="pill active" data-cat="all"><span class="dot" style="background:var(--jade-1)"></span>Tất cả (${data.length})</button>`;
+  catOrder.forEach(c=>{
+    html += `<button class="pill" data-cat="${c}"><span class="dot" style="background:${catColor[c]}"></span>${catLabel[c]} (${counts[c]})</button>`;
+  });
+  document.getElementById('filterRowAll').innerHTML = html;
+  document.querySelectorAll('#filterRowAll .pill').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('#filterRowAll .pill').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      currentCatAll = btn.dataset.cat;
+      renderMasterList();
+    });
+  });
+}
+
+function renderYearChart(){
+  const counts = {};
+  data.forEach(e=>{ counts[e.y] = (counts[e.y]||0)+1; });
+  const years = Object.keys(counts).map(Number).sort((a,b)=>a-b);
+  const max = Math.max(...years.map(y=>counts[y]));
+  document.getElementById('yearChart').innerHTML = years.map(y=>{
+    const pct = Math.max(10, Math.round(counts[y]/max*100));
+    const active = (currentYear===y) ? ' active' : '';
+    return `<div class="ybar-col${active}" data-year="${y}"><div class="bar-num">${counts[y]}</div><div class="bar" style="height:${pct}%"></div><div class="bar-lbl">${y}</div></div>`;
+  }).join('');
+  document.querySelectorAll('#yearChart .ybar-col').forEach(col=>{
+    col.addEventListener('click', ()=>{
+      const y = Number(col.dataset.year);
+      currentYear = (currentYear===y) ? 'all' : y;
+      renderYearChart();
+      renderMasterList();
+    });
+  });
+  const sel = document.getElementById('yearSelect');
+  if(sel.options.length===0){
+    sel.innerHTML = `<option value="all">Tất cả các năm</option>` + years.map(y=>`<option value="${y}">Năm ${y} (${counts[y]} sự kiện)</option>`).join('');
+  }
+  sel.value = currentYear==='all' ? 'all' : String(currentYear);
+}
+
+function renderMasterList(){
+  const items = data.filter(e=>
+    (currentCatAll==='all' || e.cat===currentCatAll) &&
+    (currentYear==='all' || e.y===currentYear)
+  );
+  const parts = [];
+  parts.push(currentCatAll==='all' ? 'Tất cả nhóm' : catLabel[currentCatAll]);
+  parts.push(currentYear==='all' ? 'mọi năm' : `năm ${currentYear}`);
+  document.getElementById('filterTagAll').textContent = `đang xem: ${parts.join(' · ')} (${items.length})`;
+  renderInto('eventListAll', items, 'Không có sự kiện nào khớp với bộ lọc đang chọn.');
+}
+
+document.getElementById('resetBtnAll').addEventListener('click', ()=>{
+  document.querySelectorAll('#filterRowAll .pill').forEach(b=>b.classList.remove('active'));
+  document.querySelector('#filterRowAll .pill[data-cat="all"]').classList.add('active');
+  currentCatAll = 'all';
+  currentYear = 'all';
+  renderYearChart();
+  renderMasterList();
+});
+
+document.getElementById('yearSelect').addEventListener('change', (e)=>{
+  currentYear = e.target.value==='all' ? 'all' : Number(e.target.value);
+  renderYearChart();
+  renderMasterList();
+});
+
+/* ===================== KHỞI TẠO ===================== */
+function renderRadar(){
+  const metrics = [
+    {label:'Tuổi', value:46, max:60, display:'46'},
+    {label:'Tuổi nghề', value:22, max:30, display:'22'},
+    {label:'Đơn vị CT', value:3, max:6, display:'3'},
+    {label:'Nâng bậc', value:8, max:10, display:'8'},
+    {label:'Danh hiệu', value:3, max:8, display:'3'},
+    {label:'Chứng chỉ', value:8, max:10, display:'8'},
+  ];
+  const cx=150, cy=150, R=104, n=metrics.length;
+  const angle = i => (Math.PI*2*i/n) - Math.PI/2;
+  const pt = (i,frac) => [cx + Math.cos(angle(i))*R*frac, cy + Math.sin(angle(i))*R*frac];
+
+  const rings = [0.33,0.66,1].map(f=>{
+    const pts = metrics.map((_,i)=> pt(i,f).map(v=>v.toFixed(1)).join(',')).join(' ');
+    return `<polygon points="${pts}" fill="none" stroke="rgba(150,240,210,0.16)" stroke-width="1"/>`;
+  }).join('');
+
+  const axes = metrics.map((_,i)=>{
+    const [x,y] = pt(i,1);
+    return `<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="rgba(150,240,210,0.16)" stroke-width="1"/>`;
+  }).join('');
+
+  const dataPts = metrics.map((m,i)=> pt(i, Math.min(m.value/m.max,1)).map(v=>v.toFixed(1)).join(',')).join(' ');
+
+  const dots = metrics.map((m,i)=>{
+    const [x,y] = pt(i, Math.min(m.value/m.max,1));
+    return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4.5" fill="#2ad9a8" stroke="#062a22" stroke-width="1.5"/>
+      <text x="${x.toFixed(1)}" y="${(y-11).toFixed(1)}" fill="#eafff5" font-size="12" font-family="Space Mono" font-weight="700" text-anchor="middle">${m.display}</text>`;
+  }).join('');
+
+  const labels = metrics.map((m,i)=>{
+    const [x,y] = pt(i,1.24);
+    return `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" fill="#9dc2b6" font-size="11" font-family="Space Mono" text-anchor="middle" dominant-baseline="middle">${m.label}</text>`;
+  }).join('');
+
+  document.getElementById('radarChart').innerHTML = `
+    ${rings}${axes}
+    <polygon points="${dataPts}" fill="rgba(42,217,168,0.24)" stroke="#2ad9a8" stroke-width="2.5" stroke-linejoin="round"/>
+    ${dots}${labels}
+  `;
+}
+
+renderKPI(); renderDonut(); renderDecadeBar(); renderNavGrid();
+renderCaNhan(); renderHocVan(); renderCongTac();
+renderLuong(); renderThamNien(); renderKhenThuong(); renderDang();
+renderFilterRowAll(); renderYearChart(); renderMasterList(); renderRadar();
+
+// Page nav active state on scroll
+const screens = document.querySelectorAll('.screen');
+const navLinks = document.querySelectorAll('.pagenav a');
+const navObserver = new IntersectionObserver((entries) => {
+  entries.forEach(en => {
+    if(en.isIntersecting){
+      navLinks.forEach(l => l.classList.toggle('active', l.dataset.target === en.target.id));
+    }
+  });
+}, {threshold:0.5});
+screens.forEach(s => navObserver.observe(s));
+
+// Nút thu gọn / mở rộng từng mục lớn (I–VIII)
+document.querySelectorAll('.collapse-btn[data-target]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = document.getElementById(btn.dataset.target);
+    const isCollapsed = target.classList.toggle('collapsed');
+    btn.textContent = isCollapsed ? '⌃ Mở rộng' : '⌄ Thu gọn';
+    syncCollapseAllLabel();
+  });
+});
+
+// Nút tổng: thu gọn tất cả / mở rộng tất cả các mục (I–VIII) cùng lúc
+const collapseAllBtn = document.getElementById('collapseAllBtn');
+function syncCollapseAllLabel(){
+  const sectionBtns = document.querySelectorAll('.collapse-btn[data-target]');
+  const allCollapsed = Array.from(sectionBtns).every(b => document.getElementById(b.dataset.target).classList.contains('collapsed'));
+  collapseAllBtn.textContent = allCollapsed ? '⌃ Mở rộng tất cả' : '⌄ Thu gọn tất cả';
+}
+collapseAllBtn.addEventListener('click', () => {
+  const shouldCollapse = collapseAllBtn.textContent.includes('Thu gọn');
+  document.querySelectorAll('.collapse-btn[data-target]').forEach(btn => {
+    const target = document.getElementById(btn.dataset.target);
+    target.classList.toggle('collapsed', shouldCollapse);
+    btn.textContent = shouldCollapse ? '⌃ Mở rộng' : '⌄ Thu gọn';
+  });
+  collapseAllBtn.textContent = shouldCollapse ? '⌃ Mở rộng tất cả' : '⌄ Thu gọn tất cả';
+});
+</script>
+
+</body>
+</html>
